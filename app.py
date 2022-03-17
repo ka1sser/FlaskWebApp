@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from forms import SignUpForm
 
 app = Flask(__name__)
-app.config["SECRET KEY"] = "secret"
+app.config["SECRET_KEY"] = "secret"
 
 posts = [
     {"author": "Edward Elric",
@@ -23,3 +24,10 @@ def home():
 def animal():
     return render_template('animal.html', posts=posts, title="Fun Animal Facts")
 
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    form = SignUpForm()
+    if form.is_submitted():
+        result = request.form
+        return render_template("userdata.html", result=result)
+    return render_template('signup.html', form=form)
